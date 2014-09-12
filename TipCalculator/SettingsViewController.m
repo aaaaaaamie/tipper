@@ -46,9 +46,16 @@
         tipPercentage = [defaults objectForKey:@"customPercentages"];
     }
     
-    self.Stepper1Label.text = [NSString stringWithFormat:@"%0.0f", [tipPercentage[0] floatValue]];
-    self.Stepper2Label.text = [NSString stringWithFormat:@"%0.0f", [tipPercentage[1] floatValue]];
-    self.Stepper3Label.text = [NSString stringWithFormat:@"%0.0f", [tipPercentage[2] floatValue]];
+    self.Stepper1Outlet.value = [tipPercentage[0] floatValue];
+    self.Stepper1Label.text = [NSString stringWithFormat:@"%0.0f", self.Stepper1Outlet.value];
+    
+    
+    self.Stepper2Outlet.value = [tipPercentage[1] floatValue];
+    self.Stepper2Label.text = [NSString stringWithFormat:@"%0.0f", self.Stepper2Outlet.value];
+    
+    
+    self.Stepper3Outlet.value = [tipPercentage[2] floatValue];
+    self.Stepper3Label.text = [NSString stringWithFormat:@"%0.0f", self.Stepper3Outlet.value];
     
     // Do any additional setup after loading the view from its nib.
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStylePlain target:self action:@selector(onTapDoneButton)];
