@@ -14,8 +14,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *tipAmountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *totalAmountLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tipPercentControl;
+- (IBAction)onInputChange:(id)sender;
+
 - (IBAction)onTapOnRestOfScreen:(id)sender;
-- (IBAction)onEnteringBillAmount:(id)sender;
 - (IBAction)onTapTipControl:(id)sender;
 @end
 
@@ -63,33 +64,37 @@
 
 // immediately dismiss the keypad and update the tip and total amounts
 - (IBAction)onTapTipControl:(id)sender {
-    // calculation on   ly happens when there's actually amount entered
+    // calculation only happens when there's actual amount entered
     if ([self.billAmountTxt.text floatValue] != 0) {
         [self updateAmountLabels];
     }
 }
+
+- (IBAction)onInputChange:(id)sender {
+    [self updateAmountLabels];
+}
+
 
 // for dismissing the keypad when user tap on anywhere on the screen except for the tip percentage control
 - (IBAction)onTapOnRestOfScreen:(id)sender {
     [self.view endEditing:YES];
 }
 
-// for resetting the tip percentage
-- (IBAction)onEnteringBillAmount:(id)sender {
-    self.tipPercentControl.selectedSegmentIndex = -1;
-}
-
 // actually implementation of the tip calculation
 - (void)updateAmountLabels {
-    //future implementation
+    //future implementation:
     // validate the bill amount
-    
     float billAmount = [self.billAmountTxt.text floatValue];
-    NSString *percentageString = [self.tipPercentControl titleForSegmentAtIndex:[self.tipPercentControl selectedSegmentIndex]];
-    float tipAmount = billAmount * [[percentageString substringToIndex:percentageString.length - 1] floatValue] / 100;
+    float tipPercentage = 0;
     
-    self.tipAmountLabel.text = [NSString stringWithFormat:@"%0.2f", tipAmount];
-    self.totalAmountLabel.text = [NSString stringWithFormat:@"%0.2f", billAmount + tipAmount];
+    if (self.tipPercentControl.selectedSegmentIndex != -1) {
+        NSString *percentageString = [self.tipPercentControl titleForSegmentAtIndex:[self.tipPercentControl selectedSegmentIndex]];
+        tipPercentage = [[percentageString substringToIndex:percentageString.length - 1] floatValue] / 100;
+    }
+    
+    float tipAmount = billAmount * tipPercentage;
+    self.tipAmountLabel.text = [NSString stringWithFormat:@"$%0.2f", tipAmount];
+    self.totalAmountLabel.text = [NSString stringWithFormat:@"$%0.2f", billAmount + tipAmount];
 }
 
 @end
